@@ -15,10 +15,10 @@ def setup_bank(institution_id: str, name: str):
         reference_id=name
     )
     print(f"Öffne diesen Link im Browser: {init.link}")
-    # Nach Auth: requisition_id speichern
+    # requisition_id speichern
     return init.requisition_id
 
-# Täglich: Transaktionen holen
+# Transaktionen holen
 def fetch_transactions(requisition_id: str) -> list:
     accounts = client.requisition.get_requisition_by_id(requisition_id)["accounts"]
     all_txns = []

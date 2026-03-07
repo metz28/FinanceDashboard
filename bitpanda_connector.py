@@ -2,8 +2,9 @@
 import duckdb
 import requests
 from datetime import datetime
+from config import BITPANDA_API_KEY
 
-BITPANDA_API_KEY = "401b1fbc9b50fdacf30235bbdb94532377dc99383a2214395f51141e7ad497111ad844041241612d1075582b48401a94f8d5df4e3174a23016c739b90dd35c8e"
+
 BASE_URL = "https://api.bitpanda.com/v1"
 HEADERS = {"X-API-KEY": BITPANDA_API_KEY}
 
@@ -30,23 +31,35 @@ def fetch_all_trades():
             break
     return all_trades
 
+def table_exists(con, table_name):
+    """Returns True if the table exists in the current database."""
+    result = con.execute(
+        "SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = ?)",
+        [table_name]
+    ).fetchone()[0]
+    return result
+
+
 
 def store_bitpanda_trades():
     con = duckdb.connect("finance.duckdb")
-    con.execute("""
-        CREATE TABLE IF NOT EXISTS bitpanda_trades (
-            id VARCHAR PRIMARY KEY,
-            trade_date DATE,
-            type VARCHAR,
-            asset_symbol VARCHAR,
-            asset_type VARCHAR,
-            shares DECIMAL(18,8),
-            price_eur DECIMAL(12,4),
-            total_eur DECIMAL(12,2),
-            fee_eur DECIMAL(12,4),
-            synced_at TIMESTAMP
-        )
-    """)
+
+    if(table_exists is not True):
+
+        con.execute("""
+            CREATE TABLE IF NOT EXISTS bitpanda_trades (
+                id VARCHAR PRIMARY KEY,
+                trade_date DATE,
+                type VARCHAR,
+                asset_symbol VARCHAR,
+                asset_type VARCHAR,
+                shares DECIMAL(18,8),
+                price_eur DECIMAL(12,4),
+                total_eur DECIMAL(12,2),
+                fee_eur DECIMAL(12,4),
+                synced_at TIMESTAMP
+            )
+        """)
 
     trades = fetch_all_trades()
     inserted = 0

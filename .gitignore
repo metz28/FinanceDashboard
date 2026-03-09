@@ -2,3 +2,6 @@ config.py
 
 __pycache__/
 .claude/
+
+SETUP.md
+SSL_FIX.md

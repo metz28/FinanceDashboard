@@ -1,7 +1,7 @@
-
-
-GOCARDLESS_SECRET_ID = "dein_id"   # von bankaccountdata.gocardless.com
+GOCARDLESS_SECRET_ID = "dein_id"
 GOCARDLESS_SECRET_KEY = "dein_key"
 
-#BANkIDS...
+BITPANDA_API_KEY = "dein_bitpanda_key"
 
+REVOLUT_REQUISITION_ID = ""
+C24_REQUISITION_ID = ""

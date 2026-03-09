@@ -4,6 +4,7 @@
 
 import pandas as pd
 
+
 def load_zero_manual_csv(path: str) -> pd.DataFrame:
     """
     Erwartetes CSV-Format:

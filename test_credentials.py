@@ -10,7 +10,7 @@ def test_bitpanda():
 
     try:
         r = requests.get(
-            "https://api.bitpanda.com/v1/time",
+            "https://api.bitpanda.com/v1/trades",
             headers={"X-API-KEY": BITPANDA_API_KEY},
             timeout=10,
             verify=False
@@ -23,6 +23,7 @@ def test_bitpanda():
         elif r.status_code == 401:
             print(f"  ✗ API Key ungültig (401 Unauthorized)")
             print(f"  → Prüfe deinen Key auf bitpanda.com")
+            print(BITPANDA_API_KEY)
             return False
         elif r.status_code == 403:
             print(f"  ✗ Zugriff verweigert (403 Forbidden)")

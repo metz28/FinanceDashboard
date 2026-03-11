@@ -5,3 +5,5 @@ __pycache__/
 
 SETUP.md
 SSL_FIX.md
+
+*.duckdb

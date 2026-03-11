@@ -10,6 +10,33 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 BASE_URL = "https://api.bitpanda.com/v1"
 HEADERS = {"X-API-KEY": BITPANDA_API_KEY}
 
+#TODO add fetch_wallet
+
+def fetch_wallets(cursor=None):
+    params = {"page_size": 100}
+    if cursor:
+        params["cursor"] = cursor
+
+        try:
+
+            r =requests.get(
+                f"{BASE_URL}/wallets",
+                params=params,
+                headers=HEADERS,
+                verify=True,
+                timeout=30
+
+                )
+            
+            res = r.json()
+
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 401:
+                print("unauthorized")
+
+
+    return res
+
 
 def fetch_trades(cursor=None):
     params = {"page_size": 100}
@@ -87,11 +114,6 @@ def table_exists(con, table_name):
 
 
 def store_bitpanda_trades():
-    if BITPANDA_API_KEY in ["", "dein_bitpanda_key", None]:
-        print("⊘ Bitpanda: API Key nicht konfiguriert - übersprungen")
-        print("  Trage deinen API Key in config.py ein:")
-        print("  BITPANDA_API_KEY = 'dein_echter_key'")
-        return
 
     try:
         con = duckdb.connect("finance.duckdb")

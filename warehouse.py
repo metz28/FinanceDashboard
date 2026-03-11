@@ -54,7 +54,7 @@ def init_database():
     """)
 
     con.close()
-    print("✓ Datenbank initialisiert")
+    print("Datenbank initialisiert")
 
 
 if __name__ == "__main__":

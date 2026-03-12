@@ -19,6 +19,13 @@ def init_database():
     """)
 
     con.execute("""
+                CREATE TABLE IF NOT EXISTS bitpanda_wallets(
+                id VARCHAR PRIMARY KEY
+                )
+                
+                """)
+
+    con.execute("""
         CREATE TABLE IF NOT EXISTS bitpanda_trades (
             id VARCHAR PRIMARY KEY,
             trade_date DATE,

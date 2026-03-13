@@ -27,3 +27,5 @@ def fetch_transactions(requisition_id: str) -> list:
         txns = account.get_transactions()["transactions"]["booked"]
         all_txns.extend(txns)
     return all_txns
+
+#test git

@@ -112,6 +112,26 @@ def table_exists(con, table_name):
     ).fetchone()[0]
     return result
 
+def store_bitpanda_wallets():
+
+    try:
+        con = duckdb.connect("finance.duckdb")
+
+        if not table_exists(con,"bitpanda_wallets"):
+            con.execute("sql")
+
+        
+        wallets = fetch_wallets
+
+        if not wallets:
+
+            con.close
+            return
+        
+        for wallet in wallets:
+            con.execute("sql")
+    None
+
 
 def store_bitpanda_trades():
 

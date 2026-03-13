@@ -130,7 +130,11 @@ def store_bitpanda_wallets():
         
         for wallet in wallets:
             con.execute("sql")
-    None
+            
+    except Exception as e:
+        print(f"✗ Bitpanda Fehler: {e}")
+        import traceback
+        traceback.print_exc()
 
 
 def store_bitpanda_trades():

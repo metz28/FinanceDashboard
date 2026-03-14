@@ -17,25 +17,26 @@ def fetch_wallets(cursor=None):
     if cursor:
         params["cursor"] = cursor
 
-        try:
+    try:
+        r = requests.get(
+            f"{BASE_URL}/wallets",
+            params=params,
+            headers=HEADERS,
+            verify=True,
+            timeout=30
+        )
+        r.raise_for_status()
+        return r.json()
 
-            r =requests.get(
-                f"{BASE_URL}/wallets",
-                params=params,
-                headers=HEADERS,
-                verify=True,
-                timeout=30
-
-                )
-            
-            res = r.json()
-
-        except requests.exceptions.HTTPError as e:
-            if e.response.status_code == 401:
-                print("unauthorized")
-
-
-    return res
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 401:
+            print("✗ Unauthorized: API Key ist ungültig")
+        else:
+            print(f"✗ HTTP-Fehler {e.response.status_code}: {e}")
+        return {"data": []}
+    except requests.exceptions.RequestException as e:
+        print(f"✗ Netzwerk-Fehler: {e}")
+        return {"data": []}
 
 
 def fetch_trades(cursor=None):
@@ -117,22 +118,72 @@ def store_bitpanda_wallets():
     try:
         con = duckdb.connect("finance.duckdb")
 
-        if not table_exists(con,"bitpanda_wallets"):
-            con.execute("sql")
+        if not table_exists(con, "bitpanda_wallets"):
+            con.execute("""
+                CREATE TABLE IF NOT EXISTS bitpanda_wallets (
+                    id VARCHAR PRIMARY KEY,
+                    wallet_name VARCHAR,
+                    asset_symbol VARCHAR,
+                    asset_type VARCHAR,
+                    balance DECIMAL(18,8),
+                    balance_eur DECIMAL(12,2),
+                    is_default BOOLEAN,
+                    synced_at TIMESTAMP
+                )
+            """)
 
-        
-        wallets = fetch_wallets
+        wallets_data = fetch_wallets()
 
-        if not wallets:
-
-            con.close
+        if not wallets_data or not wallets_data.get("data"):
+            print("⚠ Keine Bitpanda Wallets gefunden oder API-Fehler")
+            con.close()
             return
-        
+
+        wallets = wallets_data.get("data", [])
+        inserted = 0
+        updated = 0
+
         for wallet in wallets:
-            con.execute("sql")
-            
+            attr = wallet.get("attributes", {})
+            wallet_id = wallet.get("id")
+
+            exists = con.execute(
+                "SELECT COUNT(*) FROM bitpanda_wallets WHERE id = ?",
+                [wallet_id]
+            ).fetchone()[0]
+
+            if exists:
+                con.execute("""
+                    UPDATE bitpanda_wallets
+                    SET balance = ?, balance_eur = ?, synced_at = ?
+                    WHERE id = ?
+                """, [
+                    float(attr.get("balance", 0)),
+                    float(attr.get("balance_eur", 0)),
+                    datetime.now(),
+                    wallet_id
+                ])
+                updated += 1
+            else:
+                con.execute("""
+                    INSERT INTO bitpanda_wallets VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """, [
+                    wallet_id,
+                    attr.get("name"),
+                    attr.get("cryptocoin_symbol") or attr.get("fiat_symbol"),
+                    attr.get("type"),
+                    float(attr.get("balance", 0)),
+                    float(attr.get("balance_eur", 0)),
+                    attr.get("is_default", False),
+                    datetime.now()
+                ])
+                inserted += 1
+
+        con.close()
+        print(f"✓ Bitpanda Wallets: {inserted} neu, {updated} aktualisiert")
+
     except Exception as e:
-        print(f"✗ Bitpanda Fehler: {e}")
+        print(f"✗ Bitpanda Wallets Fehler: {e}")
         import traceback
         traceback.print_exc()
 

@@ -219,26 +219,30 @@ def show_summary():
     try:
         con = duckdb.connect("finance.duckdb")
 
-        # Transaction counts by bank
         print("\n=== Summary ===")
-        result = con.execute("""
-            SELECT
-                bank_name,
-                COUNT(*) as transaction_count,
-                MIN(booking_date) as earliest,
-                MAX(booking_date) as latest,
-                SUM(amount) as balance
-            FROM bank_transactions
-            GROUP BY bank_name
-            ORDER BY bank_name
-        """).fetchall()
 
-        if result:
-            print("\nBank Transactions:")
-            for row in result:
-                bank, count, earliest, latest, balance = row
-                print(f"  {bank}: {count} transactions ({earliest} to {latest}), Balance: {balance:.2f} EUR")
-        else:
+        # Bank transactions summary
+        try:
+            result = con.execute("""
+                SELECT
+                    bank_name,
+                    COUNT(*) as transaction_count,
+                    MIN(booking_date) as earliest,
+                    MAX(booking_date) as latest,
+                    SUM(amount) as balance
+                FROM bank_transactions
+                GROUP BY bank_name
+                ORDER BY bank_name
+            """).fetchall()
+
+            if result:
+                print("\nBank Transactions:")
+                for row in result:
+                    bank, count, earliest, latest, balance = row
+                    print(f"  {bank}: {count} transactions ({earliest} to {latest}), Balance: {balance:.2f} EUR")
+            else:
+                print("\n[INFO] No bank transactions in database yet.")
+        except Exception as e:
             print("\n[INFO] No bank transactions in database yet.")
 
         # Securities orders summary
@@ -260,7 +264,7 @@ def show_summary():
                 for row in order_result:
                     broker, count, earliest, latest = row
                     print(f"  {broker}: {count} orders ({earliest} to {latest})")
-        except:
+        except Exception as e:
             pass  # Table might not exist yet
 
         # Bitpanda summary (if enabled)
@@ -270,7 +274,7 @@ def show_summary():
 
             if wallet_count or trade_count:
                 print(f"\nBitpanda: {wallet_count} wallets, {trade_count} trades")
-        except:
+        except Exception as e:
             pass  # Tables might not exist yet
 
         con.close()

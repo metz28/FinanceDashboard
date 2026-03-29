@@ -197,6 +197,9 @@ class BankManager:
 
 # CLI usage example
 if __name__ == "__main__":
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
     from config import FINTS_BANKS
 
     print("=== FinTS Bank Manager ===\n")

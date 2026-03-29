@@ -1,9 +1,37 @@
+# Credentials und sensible Daten
 config.py
 
+# Python
 __pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Claude
 .claude/
 
-SETUP.md
-SSL_FIX.md
-
+# Datenbank
 *.duckdb
+*.duckdb.wal
+
+# CSV Daten (außer Beispiel-Dateien)
+data/*.csv
+data/**/*.csv
+!data/example_*.csv
+
+# OS
+.DS_Store
+Thumbs.db

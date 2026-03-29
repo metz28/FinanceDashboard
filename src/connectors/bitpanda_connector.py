@@ -2,6 +2,11 @@
 import duckdb
 import requests
 from datetime import datetime
+import sys
+from pathlib import Path
+
+# Add project root to path to import config
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from config import BITPANDA_API_KEY
 import urllib3
 
@@ -49,35 +54,12 @@ def fetch_trades(cursor=None):
             f"{BASE_URL}/trades",
             headers=HEADERS,
             params=params,
-            verify=True,
+            verify=False,
             timeout=30
         )
         r.raise_for_status()
         data = r.json()
         return data["data"], data.get("meta", {}).get("next_cursor")
-    except requests.exceptions.SSLError:
-        print("⚠ SSL-Fehler - versuche ohne Zertifikatsprüfung...")
-        try:
-            r = requests.get(
-                f"{BASE_URL}/trades",
-                headers=HEADERS,
-                params=params,
-                verify=False,
-                timeout=30
-            )
-            r.raise_for_status()
-            data = r.json()
-            return data["data"], data.get("meta", {}).get("next_cursor")
-        except requests.exceptions.HTTPError as e:
-            if r.status_code == 401:
-                print(f"✗ Authentifizierungs-Fehler: API Key ist falsch oder ungültig")
-                print(f"  Aktueller Key: {BITPANDA_API_KEY[:10]}...")
-                print(f"  Bitte korrekten API Key in config.py eintragen!")
-            elif r.status_code == 403:
-                print(f"✗ Zugriff verweigert: API Key hat keine Berechtigung für Trades")
-            else:
-                print(f"✗ HTTP-Fehler {r.status_code}: {e}")
-            return [], None
     except requests.exceptions.HTTPError as e:
         if e.response.status_code == 401:
             print(f"✗ Authentifizierungs-Fehler: API Key ist falsch oder ungültig")

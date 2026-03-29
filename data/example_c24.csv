@@ -1,0 +1,6 @@
+Transaktionstyp,Buchungsdatum,Karteneinsatz,Betrag,Zahlungsempfänger,IBAN,BIC,Verwendungszweck,Beschreibung,Kontonummer,Kontoname,Kategorie,Unterkategorie,Bargeldabhebung
+Ausgehende Überweisung,01.01.2024,,"-123,45",REWE Markt,DE12345678901234567890,COBADEFFXXX,Einkauf Lebensmittel,,12345678,Girokonto,Lebensmittel,Supermarkt,
+Kartenzahlung,02.01.2024,REWE Tankstelle,"-45,67",REWE Tankstelle,,,Tanken,,12345678,Girokonto,Auto,Kraftstoff,
+Eingehende Überweisung,05.01.2024,,"2500,00",Arbeitgeber GmbH,DE98765432109876543210,DEUTDEFFXXX,Gehalt Januar 2024,,12345678,Girokonto,Einkommen,Gehalt,
+Kartenzahlung,07.01.2024,Amazon,"-89,99",Amazon EU S.a.r.L.,,,Bestellung Nr. 123-456,,12345678,Girokonto,Shopping,Online,
+Bargeldabhebung,10.01.2024,ATM Sparkasse,"-100,00",Geldautomat,,,Bargeldabhebung,,12345678,Girokonto,Bargeld,Abhebung,Ja

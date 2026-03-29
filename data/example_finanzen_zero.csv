@@ -1,0 +1,6 @@
+Name;ISIN;WKN;Anzahl;Anzahl storniert;Status;Orderart;Limit;Stop;Erstellt Datum;Erstellt Zeit;Gültig bis;Richtung;Wert;Wert storniert;Mindermengenzuschlag;Ausführung Datum;Ausführung Zeit;Ausführung Kurs;Anzahl ausgeführt;Anzahl offen;Gestrichen Datum;Gestrichen Zeit
+Apple Inc.;US0378331005;865985;10;0;Ausgeführt;Market;;;01.01.2024;10:30:00;31.12.2024;Kauf;1850,00;0,00;0,00;01.01.2024;10:31:05;185,00;10;0;;
+Microsoft Corp.;US5949181045;870747;5;0;Ausgeführt;Limit;400,00;;05.01.2024;14:20:00;31.12.2024;Kauf;1975,00;0,00;0,00;05.01.2024;15:05:22;395,00;5;0;;
+Siemens AG;DE0007236101;723610;15;0;Ausgeführt;Market;;;10.01.2024;09:00:00;31.12.2024;Kauf;2550,00;0,00;0,00;10.01.2024;09:01:18;170,00;15;0;;
+Allianz SE;DE0008404005;840400;3;0;Ausgeführt;Limit;250,00;;15.01.2024;11:45:00;31.12.2024;Verkauf;742,50;0,00;0,00;15.01.2024;12:30:44;247,50;3;0;;
+Tesla Inc.;US88160R1014;A1CX3T;8;0;Ausgeführt;Market;;;20.01.2024;16:00:00;31.12.2024;Kauf;1520,00;0,00;0,00;20.01.2024;16:01:33;190,00;8;0;;
